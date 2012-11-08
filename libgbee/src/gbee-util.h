@@ -187,6 +187,24 @@ bool gbeeUtilDecodeUdp(GBeeRxPacket16 *frame, uint16_t length, uint8_t **payload
  */
 const char *gbeeUtilCodeToString(GBeeError code);
 
+/**
+ * Converts a XBee Tx status code to ASCII string.
+ * 
+ * \param[in] code specifies the Tx status code.
+ * 
+ * \return A pointer to an ASCII string for the specified Tx status code
+ */
+const char *gbeeUtilTxStatusCodeToString(uint8_t code);
+
+/**
+ * Converts a XBee status code to ASCII string.
+ * 
+ * \param[in] code specifies the Tx status code.
+ * 
+ * \return A pointer to an ASCII string for the specified Tx status code
+ */
+const char *gbeeUtilStatusCodeToString(uint8_t code);
+
 #endif /*GBEE_UTIL_H_INCLUDED*/
 
 #ifdef __cplusplus
