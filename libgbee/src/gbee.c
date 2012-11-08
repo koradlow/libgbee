@@ -503,6 +503,39 @@ GBeeError gbeeSendTxRequest16(GBee *self, uint8_t frameId, uint16_t dstAddr16,
 
 /******************************************************************************/
 
+GBeeError gbeeSendTxRequest(GBee *self, uint8_t frameId, uint32_t dstAddr64h, 
+		uint32_t dstAddr64l, uint16_t dstAddr16, uint8_t bcastRadius,
+		uint8_t options, uint8_t *data, uint16_t length) {
+
+	// Error code returned by GBee.
+	GBeeError error = GBEE_NO_ERROR;
+	// 16bit address Tx request parameters.
+	GBeeTxRequest txRequest;
+
+	// Check some pre-conditions.
+	if (self->lastError != GBEE_NO_ERROR)
+	{
+		error = GBEE_INHERITED_ERROR;
+	}
+	GBEE_THROW(error);
+
+	// Assemble the AT command frame.
+	txRequest.ident      = GBEE_TX_REQUEST;
+	txRequest.frameId    = frameId;
+	txRequest.dstAddr64h = GBEE_ULONG(dstAddr64h);
+	txRequest.dstAddr64l = GBEE_ULONG(dstAddr64l);
+	txRequest.dstAddr16  = GBEE_USHORT(dstAddr16);
+	txRequest.bcastRadius = bcastRadius;
+	txRequest.options    = options;
+	GBEE_PORT_MEMORY_COPY(txRequest.data, data, length);
+
+	// Send the AT command frame.
+	error = gbeeSend(self, (GBeeFrameData *)&txRequest, length + GBEE_TX_REQUEST_HEADER_LENGTH);
+	return error;
+}
+
+/******************************************************************************/
+
 GBeeError gbeeXferAtCommand(GBee *self, const char *command, const char *args,
 		uint16_t argLength, char *response, uint16_t *responseLength)
 {
