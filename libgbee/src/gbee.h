@@ -509,7 +509,52 @@ struct __attribute__((__packed__)) gbeeTxStatus {
 
 /** Type definition for ::gbeeTxStatus. */
 typedef struct gbeeTxStatus GBeeTxStatus;
- 
+
+/**
+ * When a TX Request is completed, the module sends a TX status message. This 
+ * message will indicate if the packet was transmitted successfully or if 
+ * there was a failure. This is the data structure that's compatible with
+ * the latest version of the protocol
+ */
+struct __attribute__((__packed__)) gbeeTxStatusNew {
+	/** API identifier: 0x8B. */
+	uint8_t ident;
+	/**
+	 * Identifies UART data frame being reported. Note: If Frame ID = 0 in the 
+	 * TX Request, no AT command response will be given.
+	 */
+	uint8_t frameId;
+	/** MSB (most significant byte) first, LSB (least significant) last. */
+	uint16_t srcAddr16;
+	/** Number of application transmission retries that took place. */
+	uint8_t retryCnt;
+	/**
+	 * 0 = Success, 0x01 = No ACK received, 0x02 = CCA failure, 
+	 * 0x15 = Invalid destination, 0x21 = Netwock ACK failure,
+	 * 0x22 = Not joined to Nw, 0x23 = Self-addressed
+	 * 0x24 = Address Not Found, 0x25 = Route Not Found,
+	 * 0x26 = Broadcast source failed to hear a neighbor relay the message,
+	 * 0x2B = Invalid binding table index,
+	 * 0x2C = Resource error lack of free buffers, timers, etc.,
+	 * 0x2D = Attempted broadcast with APS transmission,
+	 * 0x2E = Attempted unicast with APS transmission, but EE=0,
+	 * 0x32 = Resource error lack of free buffers, timers, etc.,
+	 * 0x74 = Data payload too large, 0x75 = Indirect message unrequested
+	 */	
+	uint8_t deliveryStatus;
+	/**
+	 * 0x00 = No Discovery Overhead
+	 * 0x01 = Address Discovery
+	 * 0x02 = Route Discovery
+	 * 0x03 = Address and Route
+	 * 0x40 = Extended Timeout
+	 */
+	 uint8_t discoveryStatus;
+};
+
+/** Type definition for ::gbeeTxStatus. */
+typedef struct gbeeTxStatusNew GBeeTxStatusNew;
+
 /**
  * When the module receives an RF packet, it is sent out the UART using this
  * message type.
@@ -631,8 +676,12 @@ union gbeeFrameData {
 	GBeeTxRequest64 txRequest64;
 	/** data Tx Request frame using 16-bit addressing. */
 	GBeeTxRequest16 txRequest16;
-	/** data Tx Request frame using 64-and 16-bit addressing (new Protocol)*/
+	/** data Tx Request frame using 64-and 16-bit addressing (new Protocol). */
 	GBeeTxRequest txRequest;
+	/** Tx Transmit Status frame */
+	GBeeTxStatus txStatus;
+	/** Tx Transmit Status frame (new Protocol)*/
+	GBeeTxStatusNew txStatusNew;
 	/** Rx data using 64-bit addressing. */
 	GBeeRxPacket64 rxPacket64;
 	/** Rx data using 16-bit addressing. */
@@ -703,6 +752,7 @@ typedef struct gbeeFrame GBeeFrame;
 #define GBEE_TX_REQUEST                 0x10
 /** XBee transmission status API identifier. */
 #define GBEE_TX_STATUS                  0x89
+#define GBEE_TX_STATUS_NEW              0x8B
 /** XBee 64-bit address receive packet API identifier. */
 #define GBEE_RX_PACKET_64               0x80
 /** XBee 16-bit address receive packet API identifier. */
