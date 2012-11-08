@@ -69,6 +69,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_UTIL_H_INCLUDED
 #define GBEE_UTIL_H_INCLUDED
 
@@ -184,3 +188,7 @@ bool gbeeUtilDecodeUdp(GBeeRxPacket16 *frame, uint16_t length, uint8_t **payload
 const char *gbeeUtilCodeToString(GBeeError code);
 
 #endif /*GBEE_UTIL_H_INCLUDED*/
+
+#ifdef __cplusplus
+}
+#endif

@@ -24,6 +24,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_LINUX_H_INCLUDED
 #define GBEE_LINUX_H_INCLUDED
 
@@ -110,3 +114,7 @@ uint32_t gbeePortTimeGet(void);
 #undef GBEE_PORT_DEBUG_LOG /* you can use printf here */
 
 #endif /* GBEE_LINUX_H_INCLUDED */
+
+#ifdef __cplusplus
+}
+#endif

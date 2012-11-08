@@ -71,6 +71,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_PORT_H_INCLUDED
 #define GBEE_PORT_H_INCLUDED
 
@@ -154,3 +158,7 @@ GBeeError gbeePortComReceiveByte(int deviceIndex, uint8_t *byte, uint32_t timeou
 #undef GBEE_PORT_DEBUG_LOG /*printf*/
 
 #endif // GBEE_PORT_H_INCLUDED
+
+#ifdef __cplusplus
+}
+#endif

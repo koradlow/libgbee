@@ -138,6 +138,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_PORT_INTERFACE_H_INCLUDED
 #define GBEE_PORT_INTERFACE_H_INCLUDED
 
@@ -181,3 +185,7 @@ typedef enum gbeeError GBeeError;
 #include "gbee-port.h"
 
 #endif /* GBEE_PORT_INTERFACE_H_INCLUDED */
+
+#ifdef __cplusplus
+}
+#endif

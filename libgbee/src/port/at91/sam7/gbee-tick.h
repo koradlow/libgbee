@@ -24,6 +24,10 @@
  * Simple tick counter implementation.
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_TICK_H_INCLUDED
 #define GBEE_TICK_H_INCLUDED
 
@@ -62,3 +66,7 @@ uint32_t gbeeTickTimeoutCalculate(uint32_t period);
 bool gbeeTickTimeoutExpired(uint32_t timeout);
 
 #endif /* GBEE_TICK_H_INCLUDED */
+
+#ifdef __cplusplus
+}
+#endif

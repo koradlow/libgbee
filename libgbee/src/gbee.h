@@ -127,6 +127,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_H_INCLUDED
 #define GBEE_H_INCLUDED
 
@@ -904,3 +908,7 @@ GBeeError gbeeXferAtCommand(GBee *self, const char *command, const char *args,
 void gbeeDestroy(GBee *self);
 
 #endif /* GBEE_H_INCLUDED */
+
+#ifdef __cplusplus
+}
+#endif

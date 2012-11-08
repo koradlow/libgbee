@@ -24,6 +24,10 @@
  * USART wrapper for GBee port.
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_USART_H_INCLUDED
 #define GBEE_USART_H_INCLUDED
 
@@ -108,3 +112,7 @@ void gbeeUsartBufferPut(int deviceIndex, const uint8_t *buffer, uint16_t length)
 bool gbeeUsartByteGet(int deviceIndex, uint8_t *byte);
 
 #endif /* GBEE_USART_H_INCLUDED */
+
+#ifdef __cplusplus
+}
+#endif

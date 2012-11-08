@@ -29,6 +29,10 @@
  * http://www.at91.com and http://www.FreeRTOS.org, respectively.
  */
 
+#ifdef __cplusplus
+extern "C"{
+#endif 
+
 #ifndef GBEE_HEAP_H_INCLUDED
 #define GBEE_HEAP_H_INCLUDED
 
@@ -49,3 +53,7 @@
 void *gbeeHeapAllocate(uint32_t numberOfBytes);
 
 #endif /* GBEE_HEAP_H_INCLUDED */
+
+#ifdef __cplusplus
+}
+#endif
