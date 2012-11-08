@@ -49,6 +49,7 @@
  * <li> Remote Command Response (::GBeeRemoteAtCommandResponse)
  * <li> Transmit Request: 64-bit address (::GBeeTxRequest64)
  * <li> Transmit Request: 16-bit address (::GBeeTxRequest16)
+ * <li> Transmit Request: 16-bit address (::GBeeTxRequest)
  * <li> Transmit Status (::GBeeTxStatus)
  * <li> Receive Packet: 64-bit address (::GBeeRxPacket64)
  * <li> Receive Packet: 16-bit address (::GBeeRxPacket16)
@@ -60,7 +61,8 @@
  *
  * For convenience there is also a dedicated send function for each API frame
  * type, namely: gbeeSendAtCommand(), gbeeSendAtCommandQueue(),
- * gbeeSendRemoteAtCommand(), gbeeSendTxRequest64(), gbeeSendTxRequest16().
+ * gbeeSendRemoteAtCommand(), gbeeSendTxRequest64(), gbeeSendTxRequest16()
+ * gbeeSendTxRequest().
  *
  * See section \ref utility_functions for additional utility functions provided
  * by the libgbee.
@@ -577,6 +579,37 @@ typedef struct gbeeRxPacket16 GBeeRxPacket16;
 #define GBEE_RX_PACKET_16_HEADER_LENGTH (sizeof(GBeeRxPacket16) - GBEE_MAX_PAYLOAD_LENGTH)
 
 /**
+ * When the module receives an RF packet, it is sent out the UART using this
+ * message type.
+ */
+struct __attribute__((__packed__)) gbeeRxPacket {
+	/** API identifier: 0x90. */
+	uint8_t ident;
+	/** MSB (most significant byte) first, LSB (least significant) last. */
+	uint32_t srcAddr64h;
+	/** MSB (most significant byte) first, LSB (least significant) last. */
+	uint32_t srcAddr64l;
+	/** MSB (most significant byte) first, LSB (least significant) last. */
+	uint16_t srcAddr16;
+	/**
+	 * bit 0 [reserved]
+	 * bit 1 = Package acknowledged (0x01)
+	 * bit 2 = Package was broadcasted (0x02)
+	 * bit 5 = Package encrypted with APS (0x20)
+	 * bit 6 = Package sent from end device (0x40)
+	 */
+	uint8_t options;
+	/** Up to GBEE_MAX_PAYLOAD_LENGTH Bytes per packet. */
+	uint8_t data[GBEE_MAX_PAYLOAD_LENGTH];
+};
+
+/** Type definition for ::gbeeRxPacket. */
+typedef struct gbeeRxPacket GBeeRxPacket;
+
+/** Minimal length of receive packet with 64bit address. */
+#define GBEE_RX_PACKET_HEADER_LENGTH (sizeof(GBeeRxPacket) - GBEE_MAX_PAYLOAD_LENGTH)
+
+/**
  * Base-type for all XBee API frame data types.
  */
 union gbeeFrameData {
@@ -598,12 +631,14 @@ union gbeeFrameData {
 	GBeeTxRequest64 txRequest64;
 	/** data Tx Request frame using 16-bit addressing. */
 	GBeeTxRequest16 txRequest16;
-	/** data Tx Request frame using */
+	/** data Tx Request frame using 64-and 16-bit addressing (new Protocol)*/
 	GBeeTxRequest txRequest;
 	/** Rx data using 64-bit addressing. */
 	GBeeRxPacket64 rxPacket64;
 	/** Rx data using 16-bit addressing. */
 	GBeeRxPacket16 rxPacket16;
+	/** Rx data using 64-and 16-bit addressing (new Protocol) */
+	GBeeRxPacket16 rxPacket;
 };
 
 /** Type definition for ::gbeeFrameData. */
@@ -672,6 +707,8 @@ typedef struct gbeeFrame GBeeFrame;
 #define GBEE_RX_PACKET_64               0x80
 /** XBee 16-bit address receive packet API identifier. */
 #define GBEE_RX_PACKET_16               0x81
+/** XBee receive packet API identifier. */
+#define GBEE_RX_PACKET                  0x90
 
 /** AT command response indicating success. */
 #define GBEE_AT_COMMAND_STATUS_OK              0
@@ -704,6 +741,12 @@ typedef struct gbeeFrame GBeeFrame;
 #define GBEE_RX_BROADCAST_ADDR 0x02
 /** Received packet with broadcast PAN. */
 #define GBEE_RX_BROADCAST_PAN  0x04
+/** Received packet acknowledged. */
+#define GBEE_RX_ACKNOWLEDGED 0x01
+/** Received APS encrypted packet (new protocol). */
+#define GBEE_RX_ENCRYPTED 0x02
+/** Received packet from end device (new protocol). */
+#define GBEE_RX_END_DEVICE 0x04
 
 /**
  * This is the XBee device driver object returned by the gbeeCreate function.
