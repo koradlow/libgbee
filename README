@@ -1,0 +1,12 @@
+Library for handling XBee / XBee-PRO RF modules.
+The library is written in C and supports the following platforms: 
+Linux (x86, MIPSel), Windows (x86), AT91 SAM7 microcontrollers.
+
+This is a fork from the official libgebee V0.3.0 that can be found here:
+http://sourceforge.net/projects/libgbee/
+
+This fork adds compability with C++ compilers and makes the library
+compatible with the latest changes in the XBee protocol
+
+To build the library the CMake build system is being used. Check the
+doxygen documentation for detailled instructions.
