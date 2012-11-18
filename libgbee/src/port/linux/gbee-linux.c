@@ -53,7 +53,7 @@ int gbeePortTTYConnect(const char *deviceName)
 	// Configure the serial device.
 	tcgetattr(deviceIndex, &options);
 	
-	options.c_cflag  = B9600;
+	options.c_cflag  = B115200;
 	options.c_cflag |= CS8;
 	options.c_cflag |= CREAD;
 	options.c_cflag |= CLOCAL;
