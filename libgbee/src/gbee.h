@@ -540,7 +540,7 @@ struct __attribute__((__packed__)) gbeeTxStatusNew {
 	 * 0x2E = Attempted unicast with APS transmission, but EE=0,
 	 * 0x32 = Resource error lack of free buffers, timers, etc.,
 	 * 0x74 = Data payload too large, 0x75 = Indirect message unrequested
-	 */	
+	 */
 	uint8_t deliveryStatus;
 	/**
 	 * 0x00 = No Discovery Overhead
@@ -552,7 +552,7 @@ struct __attribute__((__packed__)) gbeeTxStatusNew {
 	 uint8_t discoveryStatus;
 };
 
-/** Type definition for ::gbeeTxStatus. */
+/** Type definition for ::gbeeTxStatusNew. */
 typedef struct gbeeTxStatusNew GBeeTxStatusNew;
 
 /**

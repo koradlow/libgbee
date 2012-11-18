@@ -163,6 +163,7 @@ GBeeError gbeeUtilReadRegister(GBee *gbee, const char *regName, uint8_t *value,
 	
 	responseLength -= GBEE_AT_COMMAND_RESPONSE_HEADER_LENGTH;
 	
+	uint8_t local_length = 0;
 	/* Check the response. */
 	if ((atCommandResponse.atCommand[0] != regName[0]) 
 			|| (atCommandResponse.atCommand[1] != regName[1]) 
