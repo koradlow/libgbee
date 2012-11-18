@@ -102,7 +102,7 @@ uint32_t gbeePortTimeGet(void);
  * If this macro is undefined, the GBee driver will not try to free allocated
  * memory (which might be necessary on small embedded systems.
  */
-#undef GBEE_PORT_MEMORY_FREE
+#define GBEE_PORT_MEMORY_FREE free
 /** This macro is used by the GBee driver to copy a block of memory. */
 #define GBEE_PORT_MEMORY_COPY memcpy
 /** This macro is used by the GBee driver to get current system time. */

@@ -368,76 +368,6 @@ typedef struct gbeeRemoteAtCommandResponse GBeeRemoteAtCommandResponse;
 /**
  * A TX Request message will cause the module to send RF data as an RF Packet.
  */
-struct __attribute__((__packed__)) gbeeTxRequest64 {
-	/** API identifier: 0x00. */
-	uint8_t ident;
-	/**
-	 * Identifies the UART data frame for the host to correlate with a 
-	 * subsequent ACK (acknowledgement). Setting Frame ID to ‘0' will disable 
-	 * response frame.
-	 */
-	uint8_t frameId;
-	/** 
-	 * Set to match the 64-bit address of the destination, MSB first, LSB 
-	 * last. Broadcast =0x000000000000FFFF. This field is ignored if the 
-	 * 16-bit network address field equals anything other than 0xFFFE.
-	 */
-	uint32_t dstAddr64h;
-	/** 
-	 * Set to match the 64-bit address of the destination, MSB first, LSB 
-	 * last. Broadcast =0x000000000000FFFF. This field is ignored if the 
-	 * 16-bit network address field equals anything other than 0xFFFE.
-	 */
-	uint32_t dstAddr64l;
-	/**
-	 * 0x01 = Disable ACK.
-	 * 0x04 = Send packet with Broadcast Pan ID.
-	 * All other bits must be set to 0.
-	 */	
-	uint8_t options;
-	/** Up to GBEE_MAX_PAYLOAD_LENGTH Bytes per packet. */
-	uint8_t data[GBEE_MAX_PAYLOAD_LENGTH];
-};
-
-/** Type definition for ::gbeeTxRequest64. */
-typedef struct gbeeTxRequest64 GBeeTxRequest64;
-
-/** Minimal length of transmit request with 64bit address. */
-#define GBEE_TX_REQUEST_64_HEADER_LENGTH (sizeof(GBeeTxRequest64) - GBEE_MAX_PAYLOAD_LENGTH)
-
-/**
- * A TX Request message will cause the module to send RF data as an RF Packet.
- */
-struct __attribute__((__packed__)) gbeeTxRequest16 {
-	/** API identifier: 0x01. */
-	uint8_t ident;
-	/**
-	 * Identifies the UART data frame for the host to correlate with a 
-	 * subsequent ACK (acknowledgement). Setting Frame ID to ‘0' will disable 
-	 * response frame.
-	 */
-	uint8_t frameId;
-	/** MSB first, LSB last. Broadcast = 0xFFFF. */
-	uint16_t dstAddr16;
-	/** 
-	 * 0x01 = Disable ACK. 
-	 * 0x04 = Send packet with Broadcast Pan ID.
-	 * All other bits must be set to 0.
-	 */	
-	uint8_t options;
-	/** Up to GBEE_MAX_PAYLOAD_LENGTH Bytes per packet. */
-	uint8_t data[GBEE_MAX_PAYLOAD_LENGTH];
-};
-
-/** Type definition for ::gbeeTxRequest16. */
-typedef struct gbeeTxRequest16 GBeeTxRequest16;
-
-/** Minimal length of transmit request with 16bit address. */
-#define GBEE_TX_REQUEST_16_HEADER_LENGTH (sizeof(GBeeTxRequest16) - GBEE_MAX_PAYLOAD_LENGTH)
-
-/**
- * A TX Request message will cause the module to send RF data as an RF Packet.
- */
 struct __attribute__((__packed__)) gbeeTxRequest {
 	/** API identifier: 0x10. */
 	uint8_t ident;
@@ -485,30 +415,6 @@ typedef struct gbeeTxRequest GBeeTxRequest;
 
 /** Minimal length of transmit request */
 #define GBEE_TX_REQUEST_HEADER_LENGTH (sizeof(GBeeTxRequest) - GBEE_MAX_PAYLOAD_LENGTH)
-
-
-/**
- * When a TX Request is completed, the module sends a TX status message. This 
- * message will indicate if the packet was transmitted successfully or if 
- * there was a failure.
- */
-struct __attribute__((__packed__)) gbeeTxStatus {
-	/** API identifier: 0x89. */
-	uint8_t ident;
-	/**
-	 * Identifies UART data frame being reported. Note: If Frame ID = 0 in the 
-	 * TX Request, no AT command response will be given.
-	 */
-	uint8_t frameId;
-	/**
-	 * 0 = Success, 1 = No ACK (Acknowledgement) received, 2 = CCA failure,
-	 * 3 = Purged.
-	 */	
-	uint8_t status;
-};
-
-/** Type definition for ::gbeeTxStatus. */
-typedef struct gbeeTxStatus GBeeTxStatus;
 
 /**
  * When a TX Request is completed, the module sends a TX status message. This 
@@ -559,74 +465,6 @@ typedef struct gbeeTxStatusNew GBeeTxStatusNew;
  * When the module receives an RF packet, it is sent out the UART using this
  * message type.
  */
-struct __attribute__((__packed__)) gbeeRxPacket64 {
-	/** API identifier: 0x80. */
-	uint8_t ident;
-	/** MSB (most significant byte) first, LSB (least significant) last. */
-	uint32_t srcAddr64h;
-	/** MSB (most significant byte) first, LSB (least significant) last. */
-	uint32_t srcAddr64l;
-	/**
-	 * Received Signal Strength Indicator - Hexadecimal equivalent of (-dBm)
-	 * value. (For example: If RX signal strength = -40 dBm, “0x28” (40 decimal)
-	 * is returned).
-	 */	
-	uint8_t rssi;
-	/**
-	 * bit 0 [reserved]
-	 * bit 1 = Address broadcast
-	 * bit 2 = PAN broadcast
-	 * bits 3-7 [reserved]
-	 */	
-	uint8_t options;
-	/** Up to GBEE_MAX_PAYLOAD_LENGTH Bytes per packet. */
-	uint8_t data[GBEE_MAX_PAYLOAD_LENGTH];
-};
-
-/** Type definition for ::gbeeRxPacket64. */
-typedef struct gbeeRxPacket64 GBeeRxPacket64;
-
-/** Minimal length of receive packet with 64bit address. */
-#define GBEE_RX_PACKET_64_HEADER_LENGTH (sizeof(GBeeRxPacket64) - GBEE_MAX_PAYLOAD_LENGTH)
-
-/**
- * When the module receives an RF packet, it is sent out the UART using this
- * message type.
- */
-struct __attribute__((__packed__)) gbeeRxPacket16 {
-	/** API identifier: 0x81. */
-	uint8_t ident;
-	/** MSB (most significant byte) first, LSB (least significant) last. */
-	uint16_t srcAddr16;
-	/**
-	 * Received Signal Strength Indicator - Hexadecimal equivalent of (-dBm) 
-	 * value. (For example: If RX signal strength = -40 dBm, “0x28” (40 decimal)
-	 * is returned).
-	 */	
-	uint8_t rssi;
-	/**
-	 * <ul>
-	 * <li>bit 0 [reserved]
-	 * <li>bit 1 = Address broadcast
-	 * <li>bit 2 = PAN broadcast
-	 * <li>bits 3-7 [reserved]
-	 * </ul>
-	 */
-	uint8_t options;
-	/** Up to GBEE_MAX_PAYLOAD_LENGTH Bytes per packet. */
-	uint8_t data[GBEE_MAX_PAYLOAD_LENGTH];
-};
-
-/** Type definition for ::gbeeRxPacket16. */
-typedef struct gbeeRxPacket16 GBeeRxPacket16; 
-
-/** Minimal length of receive packet with 16bit address. */
-#define GBEE_RX_PACKET_16_HEADER_LENGTH (sizeof(GBeeRxPacket16) - GBEE_MAX_PAYLOAD_LENGTH)
-
-/**
- * When the module receives an RF packet, it is sent out the UART using this
- * message type.
- */
 struct __attribute__((__packed__)) gbeeRxPacket {
 	/** API identifier: 0x90. */
 	uint8_t ident;
@@ -672,22 +510,12 @@ union gbeeFrameData {
 	GBeeRemoteAtCommand remoteAtCommand;
 	/** Remote GBee's AT command response frame. */
 	GBeeRemoteAtCommandResponse remoteAtCommandResponse;
-	/** data Tx Request frame using 64-bit addressing. */
-	GBeeTxRequest64 txRequest64;
-	/** data Tx Request frame using 16-bit addressing. */
-	GBeeTxRequest16 txRequest16;
-	/** data Tx Request frame using 64-and 16-bit addressing (new Protocol). */
+	/** data Tx Request frame using 64-and 16-bit addressing (ZB Protocol). */
 	GBeeTxRequest txRequest;
-	/** Tx Transmit Status frame */
-	GBeeTxStatus txStatus;
-	/** Tx Transmit Status frame (new Protocol)*/
+	/** Tx Transmit Status frame (ZB Protocol)*/
 	GBeeTxStatusNew txStatusNew;
-	/** Rx data using 64-bit addressing. */
-	GBeeRxPacket64 rxPacket64;
-	/** Rx data using 16-bit addressing. */
-	GBeeRxPacket16 rxPacket16;
-	/** Rx data using 64-and 16-bit addressing (new Protocol) */
-	GBeeRxPacket16 rxPacket;
+	/** Rx data using 64-and 16-bit addressing (ZB Protocol) */
+	GBeeRxPacket rxPacket;
 };
 
 /** Type definition for ::gbeeFrameData. */
@@ -744,19 +572,11 @@ typedef struct gbeeFrame GBeeFrame;
 #define GBEE_REMOTE_AT_COMMAND          0x17
 /** XBee remote AT command response API identifier. */
 #define GBEE_REMOTE_AT_COMMAND_RESPONSE 0x97
-/** XBee 64-bit transmit request API identifier. */
-#define GBEE_TX_REQUEST_64              0x00
-/** XBee 16-bit transmit request API identifier. */
-#define GBEE_TX_REQUEST_16              0x01
 /** XBee transmit request API identifier. */
 #define GBEE_TX_REQUEST                 0x10
 /** XBee transmission status API identifier. */
 #define GBEE_TX_STATUS                  0x89
 #define GBEE_TX_STATUS_NEW              0x8B
-/** XBee 64-bit address receive packet API identifier. */
-#define GBEE_RX_PACKET_64               0x80
-/** XBee 16-bit address receive packet API identifier. */
-#define GBEE_RX_PACKET_16               0x81
 /** XBee receive packet API identifier. */
 #define GBEE_RX_PACKET                  0x90
 
@@ -824,40 +644,6 @@ typedef struct gbee GBee;
  * error.
  */
 GBee* gbeeCreate(const char* serialName);
-
-/**
- * Sets the mode of the XBee to either API mode or transparent mode.
- * 
- * \param[in,out] self is the XBee device structure.
- * \param[in] mode specifies the mode to set.
- * 
- * \retval GBEE_NO_ERROR to indicate success.
- * \retval GBEE_INHERITED_ERROR to indicate that the call failed due to an
- * error in an earlier libgbee call.
- * \retval GBEE_RS232_ERROR to indicate a failure to establish communication
- * with the XBee.
- * \retval GBEE_RESPONSE_ERROR to indicate that an unexpected response was
- * received from the XBee (e.g. XBee answered with an error code).
- */
-GBeeError gbeeSetMode(GBee *self, GBeeMode mode);
-
-/**
- * Provides the mode the XBee is operating in.
- * 
- * \param[in] self is the XBee device structure.
- * \param[out] mode is the mode the GBee is operating in.
- * 
- * \retval GBEE_NO_ERROR to indicate success.
- * \retval GBEE_INHERITED_ERROR to indicate that the call failed due to an
- * error in an earlier libgbee call.
- * \retval GBEE_RS232_ERROR to indicate a failure to establish communication
- * with the XBee.
- * \retval GBEE_RESPONSE_ERROR to indicate that an unexpected response was
- * received from the XBee (e.g. XBee answered with an error code).
- * \retval GBEE_MODE_ERROR to indicate that the XBee operates in an unknown
- * mode.
- */
-GBeeError gbeeGetMode(GBee *self, GBeeMode *mode);
 
 /**
  * Read a frame from the XBee and check its validity. This operation calls
@@ -979,54 +765,6 @@ GBeeError gbeeSendRemoteAtCommand(GBee *self, uint8_t frameId, uint32_t dstAddr6
 		uint8_t *value, uint16_t length);
 
 /**
- * Creates a Tx Request frame using 64-bit addressing and sends it to the
- * GBee. This operation calls the serial interface send operation provided by
- * the port to access the XBee. This operation requires the XBee to be in API
- * mode.
- * 
- * \param[in] self is a pointer to the XBee device.
- * \param[in] frameId is the 8-bit frame identifier.
- * \param[in] dstAddr64h is the upper half of the 64 bit destination address.
- * \param[in] dstAddr64l is the lower half of the 64 bit destination address.
- * \param[in] options contains the transmission flags.
- * \param[in] data is the data to send.
- * \param[in] length is the length of the data.
- * 
- * \retval GBEE_NO_ERROR to indicate success.
- * \retval GBEE_INHERITED_ERROR to indicate that the call failed due to an
- * error in an earlier libgbee call.
- * \retval GBEE_FRAME_SIZE_ERROR to indicate that dataLength exceeds the
- * maximum allowed frame size.
- * \retval GBEE_RS232_ERROR to indicate a failure to establish serial
- * communication with the XBee.
- */
-GBeeError gbeeSendTxRequest64(GBee *self, uint8_t frameId, uint32_t dstAddr64h, 
-		uint32_t dstAddr64l, uint8_t options, uint8_t *data, uint16_t length);
-
-/**
- * Creates a Tx Request frame using 16-bit addressing and sends it to the
- * GBee. This operation calls the serial interface send operation provided by
- * the port to access the XBee. This operation requires the XBee to be in API
- * mode.
- * 
- * \param[in] self is a pointer to the XBee device.
- * \param[in] frameId is the 8-bit frame identifier.
- * \param[in] dstAddr16 is the 16 bit destination address.
- * \param[in] options contains the transmission flags.
- * \param[in] data is the data to send.
- * \param[in] length is the length of the data.
- * 
- * \retval GBEE_NO_ERROR to indicate success.
- * \retval GBEE_INHERITED_ERROR to indicate that the call failed due to an
- * error in an earlier libgbee call.
- * \retval GBEE_FRAME_SIZE_ERROR to indicate that dataLength exceeds the
- * maximum allowed frame size.
- * \retval GBEE_RS232_ERROR to indicate a failure to establish serial
- * communication with the XBee.
- */
-GBeeError gbeeSendTxRequest16(GBee *self, uint8_t frameId, uint16_t dstAddr16,
-		uint8_t options, uint8_t *data, uint16_t length);
-/**
  * Creates a Tx Request frame using 64-bit and optional 16-bit addressing 
  * and sends it to the GBee. This operation calls the serial interface send 
  * operation provided by the port to access the XBee. This operation 
@@ -1053,28 +791,6 @@ GBeeError gbeeSendTxRequest16(GBee *self, uint8_t frameId, uint16_t dstAddr16,
 GBeeError gbeeSendTxRequest(GBee *self, uint8_t frameId, uint32_t dstAddr64h, 
 		uint32_t dstAddr64l, uint16_t dstAddr16, uint8_t bcastRadius,
 		uint8_t options, uint8_t *data, uint16_t length);
-/**
- * Transfers the given AT command to the XBee and provides the result. This
- * operation requires the XBee to be in transparent mode.
- * Note, that the transmission of the AT command in transparent mode may take
- * approximately 2-3 seconds!
- * 
- * \param[in] self is a pointer to the XBee device.
- * \param[in] command is the command.
- * \param[in] args are the command arguments as 0-terminated string.
- * \param[in] argLength is the length of arguments.
- * \param[out] response is the XBee response (up to GBEE_MAX_FRAME_SIZE bytes).
- * \param[out] responseLength is the length of the XBee response.
- * 
- * \return GBEE_NO_ERROR if successful, or dedicated error code in case of
- * any error.
- * \retval GBEE_RS232_ERROR to indicate a failure to establish serial
- * communication with the XBee.
- * \retval GBEE_RESPONSE_ERROR to indicate that the XBee replied with an error
- * code.
- */
-GBeeError gbeeXferAtCommand(GBee *self, const char *command, const char *args, 
-		uint16_t argLength, char *response, uint16_t *responseLength);
 
 /**
  * Closes the serial interface the XBee is connected to by calling the close
